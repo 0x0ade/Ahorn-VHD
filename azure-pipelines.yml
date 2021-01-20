@@ -2,16 +2,24 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-- task: PowerShell@2
-  displayName: 'Run azure-pipelines-build.ps1'
+- task: Cache@2
+  displayName: 'Grab cache folder'
   inputs:
-    filePath: 'azure-pipelines-build.ps1'
+    key: 'cachedir-v1 | "$(Agent.OS)"'
+    path: cache
+
+- task: PowerShell@2
+  displayName: 'Run build.ps1'
+  inputs:
+    filePath: 'build.ps1'
+    env:
+      AHORNVHD_REDIST: '1'
 
 - task: CopyFiles@2
   displayName: 'Pack main artifact'
   inputs:
     sourceFolder: '$(Agent.BuildDirectory)'
-    contents: '**/bin/**/*'
+    contents: '**/out/**/*'
     targetFolder: '$(Build.ArtifactStagingDirectory)/'
     cleanTargetFolder: true
     overWrite: true
