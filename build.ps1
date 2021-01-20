@@ -138,8 +138,10 @@ Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
 # NOTE: This currently downloads a beta version of Julia and is x64-only.
 
 if (!(Test-Path -Path "$cache\julia.zip")) {
+    Write-Output "Downloading Julia"
     Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/1.6/julia-1.6.0-beta1-win64.zip" -OutFile "$cache\julia.zip"
 }
+Write-Output "Unpacking Julia"
 Expand-Archive -Force -Path "$cache\julia.zip" -DestinationPath "$mount\"
 if (Test-Path -Path "$mount\julia") {
     Remove-Item -Recurse -Path "$mount\julia"
@@ -153,6 +155,7 @@ if (!(Test-Path -Path "$mount\ahorn-env")) {
     New-Item -Path "$mount\ahorn-env" -ItemType Directory
 }
 
+Write-Output ""
 
 # Time to do what's probably gonna take the longest time...
 & "$mount\update-ahorn.bat"
@@ -188,6 +191,8 @@ select vdisk file="$ahorn"
 detach vdisk
 "@ | Out-File -Encoding ASCII -FilePath "$tmp\dp-exit.txt"
 & diskpart /s "$tmp\dp-exit.txt"
+Remove-Item -Force -Path "$mount"
+New-Item -Path "$mount" -ItemType Directory
 
 Write-Output ""
 Write-Output "Done"
