@@ -23,7 +23,7 @@ end
 using Pkg
 Pkg.activate(env)
 
-install_or_update(url::String, pkg::String) = if Base.find_package(pkg) !== nothing
+install_or_update(url::String, pkg::String) = if "Ahorn" ∈ keys(Pkg.Types.Context().env.project.deps)
 	println("Updating $pkg...")
 	Pkg.update(pkg)
 else

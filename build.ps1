@@ -44,11 +44,20 @@ $art = @"
                                        @@&
                                        @@@
 "@
+
+$info = @"
+Time: $(Get-Date -Format "o")
+User: $($env:UserName)
+CWD: $(Get-Location)
+CLI: $($MyInvocation.Line)
+"@
+
 Write-Output @"
 $art
 
-"@
+$info
 
+"@
 
 
 # Windows loves to run random stuff in System32...
@@ -62,29 +71,29 @@ $root = "$PSScriptRoot"
 Write-Output "Running Ahorn-VHD build script in $root"
 
 $mount = "$root\mount"
+$out = "$root\out"
+$tmp = "$root\tmp"
+$cache = "$root\cache"
+$ahorn = "$out\ahorn.vhdx"
+
 if (Test-Path -Path "$mount") {
     Remove-Item -Force -Path "$mount"
 }
 New-Item -Path "$mount" -ItemType Directory
 
-$out = "$root\out"
 if (Test-Path -Path "$out") {
     Remove-Item -Recurse -Path "$out"
 }
 New-Item -Path "$out" -ItemType Directory
 
-$tmp = "$root\tmp"
 if (Test-Path -Path "$tmp") {
     Remove-Item -Recurse -Path "$tmp"
 }
 New-Item -Path "$tmp" -ItemType Directory
 
-$cache = "$root\cache"
 if (!(Test-Path -Path "$cache")) {
     New-Item -Path "$cache" -ItemType Directory
 }
-
-$ahorn = "$out\ahorn.vhdx"
 
 
 
@@ -115,11 +124,9 @@ Most notably, "NO permission is granted to distribute [Ahorn]"
 To make this VHD REDISTRIBUTABLE (BEFORE UPLOAD), run launch-local-julia.bat misc/prepare-for-redistribution.jl OR build it with -Redist
 To make this VHD USABLE (AFTER DOWNLOAD), run update-ahorn.bat
 
-Here's some information about when and how this disk image was built:
-Time: $(Get-Date -Format "o")
-CWD: $(Get-Location)
-User: $($env:UserName)
-Redist: $Redist
+Here's some information about how this disk image was built:
+$info
+
 "@ | Out-File -Encoding UTF8 -FilePath "$mount\info.txt"
 
 Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
@@ -130,15 +137,21 @@ Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
 # Let the user / CI cache the download.
 # NOTE: This currently downloads a beta version of Julia and is x64-only.
 
-if (!(Test-Path "$cache\julia.zip")) {
+if (!(Test-Path -Path "$cache\julia.zip")) {
     Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/1.6/julia-1.6.0-beta1-win64.zip" -OutFile "$cache\julia.zip"
 }
-Expand-Archive -Path "$cache\julia.zip" -DestinationPath "$mount\"
+Expand-Archive -Force -Path "$cache\julia.zip" -DestinationPath "$mount\"
+if (Test-Path -Path "$mount\julia") {
+    Remove-Item -Recurse -Path "$mount\julia"
+}
 Move-Item -Path "$mount\julia-b84990e1ac" -Destination "$mount\julia"
 
-New-Item -Path "$mount\julia-depot" -ItemType Directory
-New-Item -Path "$mount\ahorn-env" -ItemType Directory
-
+if (!(Test-Path -Path "$mount\julia-depot")) {
+    New-Item -Path "$mount\julia-depot" -ItemType Directory
+}
+if (!(Test-Path -Path "$mount\ahorn-env")) {
+    New-Item -Path "$mount\ahorn-env" -ItemType Directory
+}
 
 
 # Time to do what's probably gonna take the longest time...
