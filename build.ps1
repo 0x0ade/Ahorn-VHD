@@ -1,8 +1,12 @@
+Param(
+    [switch]$Redist
+)
+
 $ErrorActionPreference = "Inquire"
 
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Host "This script must run with administrator priviledges as it will mount a virtual partition." -ForegroundColor Yellow
-    Start-Process powershell.exe -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+    Start-Process -Verb RunAs powershell (@(' -NoExit')[!$NoExit] + " -File `"$PSCommandPath`" " + ($MyInvocation.Line -split '\.ps1[\s\''\"]\s*', 2)[-1])
     Break
 }
 
@@ -108,13 +112,14 @@ The tool can be found on https://github.com/0x0ade/Ahorn-VHD
 
 Please read Ahorn's LICENSE file: https://github.com/CelestialCartographers/Ahorn/blob/master/LICENSE.md
 Most notably, "NO permission is granted to distribute [Ahorn]"
-To make this VHD REDISTRIBUTABLE (BEFORE UPLOAD), run launch-local-julia.bat misc/prepare-for-redistribution.jl OR build it with AHORNVHD_REDIST=1
+To make this VHD REDISTRIBUTABLE (BEFORE UPLOAD), run launch-local-julia.bat misc/prepare-for-redistribution.jl OR build it with -Redist
 To make this VHD USABLE (AFTER DOWNLOAD), run update-ahorn.bat
 
 Here's some information about when and how this disk image was built:
 Time: $(Get-Date -Format "o")
 CWD: $(Get-Location)
-User: $($env:UserName)
+User: $env:UserName
+Redist: $Redist
 "@ | Out-File -Encoding UTF8 -FilePath "$mount\info.txt"
 
 Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
@@ -139,7 +144,7 @@ New-Item -Path "$mount\ahorn-env" -ItemType Directory
 # Time to do what's probably gonna take the longest time...
 & "$mount\update-ahorn.bat"
 
-if ("$env:AHORNVHD_REDIST" -eq "1") {
+if ($Redist) {
     & "$mount\launch-local-julia.bat" "$mount\misc\prepare-for-redistribution.jl"
 }
 

@@ -12,7 +12,7 @@ steps:
   displayName: 'Run build.ps1'
   inputs:
     filePath: 'build.ps1'
-    env: { AHORNVHD_REDIST: '1' }
+    arguments: '-Redist'
 
 - task: CopyFiles@2
   displayName: 'Pack main artifact'
