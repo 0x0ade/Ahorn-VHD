@@ -1,0 +1,26 @@
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: PowerShell@2
+  displayName: 'Run azure-pipelines-build.ps1'
+  inputs:
+    filePath: 'azure-pipelines-build.ps1'
+
+- task: CopyFiles@2
+  displayName: 'Pack main artifact'
+  inputs:
+    sourceFolder: '$(Agent.BuildDirectory)'
+    contents: '**/bin/**/*'
+    targetFolder: '$(Build.ArtifactStagingDirectory)/'
+    cleanTargetFolder: true
+    overWrite: true
+    flattenFolders: true
+
+- task: PublishBuildArtifacts@1
+  condition: succeeded()
+  displayName: 'Publish main artifact'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/'
+    artifactName: 'main'
+    publishLocation: 'Container'
