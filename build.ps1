@@ -100,7 +100,7 @@ create partition primary
 format fs=ntfs label="Ahorn Virtual Disk" quick
 assign mount="$mount"
 "@ | Out-File -Encoding ASCII -FilePath "$tmp\dp-init.txt"
-diskpart /s "$tmp\dp-init.txt"
+& diskpart /s "$tmp\dp-init.txt"
 Write-Output ""
 
 Write-Output @"
@@ -174,7 +174,7 @@ Write-Output @"
 select vdisk file="$ahorn"
 detach vdisk
 "@ | Out-File -Encoding ASCII -FilePath "$tmp\dp-exit.txt"
-diskpart /s "$tmp\dp-exit.txt"
+& diskpart /s "$tmp\dp-exit.txt"
 
 Write-Output ""
 Write-Output "Done"
