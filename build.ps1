@@ -118,7 +118,7 @@ To make this VHD USABLE (AFTER DOWNLOAD), run update-ahorn.bat
 Here's some information about when and how this disk image was built:
 Time: $(Get-Date -Format "o")
 CWD: $(Get-Location)
-User: $env:UserName
+User: $($env:UserName)
 Redist: $Redist
 "@ | Out-File -Encoding UTF8 -FilePath "$mount\info.txt"
 
@@ -153,13 +153,13 @@ if ($Redist) {
 # File permissions are FUN. Perms set on the mount point aren't inherited properly...
 Write-Host ""
 foreach ($sub in Get-ChildItem -Path "$mount" -Directory) {
-    Write-Output "Fixing perms for dir $(sub.FullName)"
+    Write-Output "Fixing perms for dir $($sub.FullName)"
     $acl = Get-Acl $sub.FullName
     $acl.SetAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule((New-Object System.Security.Principal.SecurityIdentifier([System.Security.Principal.WellKnownSidType]::BuiltinUsersSid, $null)), "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")))
     Set-Acl -Path $sub.FullName -AclObject $acl
 }
 foreach ($sub in Get-ChildItem -Path "$mount" -File) {
-    Write-Output "Fixing perms for file $(sub.FullName)"
+    Write-Output "Fixing perms for file $($sub.FullName)"
     $acl = Get-Acl $sub.FullName
     $acl.SetAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule((New-Object System.Security.Principal.SecurityIdentifier([System.Security.Principal.WellKnownSidType]::BuiltinUsersSid, $null)), "FullControl", "None", "None", "Allow")))
     Set-Acl -Path $sub.FullName -AclObject $acl
