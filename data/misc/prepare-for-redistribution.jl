@@ -10,19 +10,19 @@ ahornPath = Base.find_package("Ahorn")
 
 infofilePath = joinpath(dirname(env), "info.txt")
 open(infofilePath, "a") do info
-	println(info, "")
-	println(info, "Additional info from prepare-for-redistribution.jl:")
-	println(info, "Ahorn install path: $(something(ahornPath, "?"))")
-	try
-		local ctx = Pkg.Types.Context()
-		println(info, "Ahorn version: $(string(ctx.env.manifest[ctx.env.project.deps["Ahorn"]].tree_hash)[1:7])")
-	catch e
-		println(info, "Ahorn version: unknown")
-	end
+    println(info, "")
+    println(info, "Additional info from prepare-for-redistribution.jl:")
+    println(info, "Ahorn install path: $(something(ahornPath, "?"))")
+    try
+        local ctx = Pkg.Types.Context()
+        println(info, "Ahorn version: $(string(ctx.env.manifest[ctx.env.project.deps["Ahorn"]].tree_hash)[1:7])")
+    catch e
+        println(info, "Ahorn version: unknown")
+    end
 end
 
 if ahornPath === nothing then
-	return
+    return
 end
 
 depot = joinpath(dirname(env), "julia-depot")

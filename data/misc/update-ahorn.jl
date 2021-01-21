@@ -24,11 +24,11 @@ using Pkg
 Pkg.activate(env)
 
 install_or_update(url::String, pkg::String) = if "Ahorn" ∈ keys(Pkg.Types.Context().env.project.deps)
-	println("Updating $pkg...")
-	Pkg.update(pkg)
+    println("Updating $pkg...")
+    Pkg.update(pkg)
 else
-	println("Adding $pkg...")
-	Pkg.add(PackageSpec(url = url))
+    println("Adding $pkg...")
+    Pkg.add(PackageSpec(url = url))
 end
 
 Pkg.instantiate()

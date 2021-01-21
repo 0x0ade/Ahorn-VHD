@@ -24,5 +24,24 @@ end
 
 using Pkg
 Pkg.activate(env)
+
+install_or_update(url::String, pkg::String) = if "Ahorn" ∈ keys(Pkg.Types.Context().env.project.deps)
+    println("Updating $pkg...")
+    Pkg.update(pkg)
+else
+    println("Adding $pkg...")
+    Pkg.add(PackageSpec(url = url))
+end
+
+if "Ahorn" ∈ keys(Pkg.Types.Context().env.project.deps)
+    Pkg.instantiate()
+
+    install_or_update("https://github.com/CelestialCartographers/Maple.git", "Maple")
+    install_or_update("https://github.com/CelestialCartographers/Ahorn.git", "Ahorn")
+
+    Pkg.instantiate()
+    Pkg.API.precompile()
+end
+
 using Ahorn
 Ahorn.displayMainWindow()
