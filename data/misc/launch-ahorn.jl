@@ -6,6 +6,7 @@ logfilePath = joinpath(mkpath(dirname(globalenv)), "error.log")
 println("Logging to " * logfilePath)
 
 logfile = open(logfilePath, "w")
+println(logfile, "Running Ahorn from a virtual disk image.")
 
 flush(stdout)
 flush(stderr)
