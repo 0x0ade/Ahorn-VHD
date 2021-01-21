@@ -34,7 +34,7 @@ else
     Pkg.add(PackageSpec(url = url))
 end
 
-if "Ahorn" ∈ keys(Pkg.Types.Context().env.project.deps)
+if Base.find_package("Ahorn") === nothing
     Pkg.instantiate()
 
     install_or_update("https://github.com/CelestialCartographers/Maple.git", "Maple")
