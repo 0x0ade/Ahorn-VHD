@@ -8,6 +8,13 @@ steps:
     key: 'cachedir-v1 | "$(Agent.OS)"'
     path: cache
 
+- task: CmdLine@2
+  displayName: 'Prepare git config'
+  inputs:
+    script: |
+      git config --global core.autocrlf false
+      git config --global core.whitespace cr-at-eol
+
 - task: PowerShell@2
   displayName: 'Run build.ps1'
   inputs:

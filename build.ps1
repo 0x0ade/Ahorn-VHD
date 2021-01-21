@@ -176,8 +176,8 @@ if ((Test-Path (& where.exe git.exe 2>&1 | %{ "$_" })) -eq $true) {
     Write-Output ""
     Write-Output "Fixing git config for general registry"
     Push-Location -Path "$mount\julia-depot\registries\General"
-    Write-Output "core.autoclrf: $(& git.exe config --global core.autoclrf)"
-    & git.exe config core.autoclrf "$(& git.exe config --global core.autoclrf)"
+    Write-Output "core.autocrlf: $(& git.exe config --global core.autocrlf)"
+    & git.exe config core.autocrlf "$(& git.exe config --global core.autocrlf)"
     Write-Output "core.whitespace: $(& git.exe config --global core.whitespace)"
     & git.exe config core.whitespace "$(& git.exe config --global core.whitespace)"
     Pop-Location
