@@ -29,9 +29,9 @@ depot = joinpath(dirname(env), "julia-depot")
 
 rm(joinpath(depot, "clones"), force = true, recursive = true)
 
-compiled = joinpath(depot, match(r"^\d+\.\d+", string(VERSION)).match)
-rm(joinpath(compiled, "v1.6", "Maple"), force = true, recursive = true)
-rm(joinpath(compiled, "v1.6", "Ahorn"), force = true, recursive = true)
+compiled = joinpath(depot, "v" * match(r"^\d+\.\d+", string(VERSION)).match)
+rm(joinpath(compiled, "Maple"), force = true, recursive = true)
+rm(joinpath(compiled, "Ahorn"), force = true, recursive = true)
 
 packages = joinpath(depot, "packages")
 rm(joinpath(packages, "Maple"), force = true, recursive = true)
