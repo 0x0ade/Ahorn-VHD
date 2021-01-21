@@ -34,7 +34,7 @@ steps:
 
 - task: CopyFilesOverSSH@0
   displayName: 'Upload to VPS'
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   inputs:
     sshEndpoint: '$(DEPLOY_SSH_ENDPOINT)'
     sourceFolder: '$(Build.ArtifactStagingDirectory)/'
