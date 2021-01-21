@@ -118,6 +118,7 @@ $art
 This virtual disk image was created using the Ahorn-VHD tool by 0x0ade and is meant to be used with Olympus.
 If you're hardcore enough, feel free to update and then run Ahorn directly off of this VHD.
 The tool can be found at https://github.com/0x0ade/Ahorn-VHD
+It currently uses Julia 1.6.0-beta1.
 
 Please read Ahorn's LICENSE file: https://github.com/CelestialCartographers/Ahorn/blob/master/LICENSE.md
 Most notably, "NO permission is granted to distribute [Ahorn]"

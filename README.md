@@ -1,5 +1,5 @@
 # Ahorn-VHD
-Helper script to create an Ahorn VHD.  
+Tool to build an Ahorn VHD including Julia and all dependencies.  
 Please check the [Ahorn repository](https://github.com/CelestialCartographers/Ahorn/) for more information about Ahorn.
 
 Run `build.ps1` to create `out\ahorn.vhdx`.
