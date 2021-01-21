@@ -11,7 +11,7 @@ ahornPath = Base.find_package("Ahorn")
 infofilePath = joinpath(dirname(env), "info.txt")
 open(infofilePath, "a") do info
 	println(info, "")
-	println(info, "Additional info:")
+	println(info, "Additional info from prepare-for-redistribution.jl:")
 	println(info, "Ahorn install path: $(something(ahornPath, "?"))")
 	try
 		local ctx = Pkg.Types.Context()

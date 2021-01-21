@@ -126,7 +126,6 @@ To make this VHD USABLE (AFTER DOWNLOAD), run update-ahorn.bat
 
 Here's some information about how this disk image was built:
 $info
-
 "@ | Out-File -Encoding UTF8 -FilePath "$mount\info.txt"
 
 Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
@@ -159,6 +158,7 @@ Write-Output ""
 
 # Time to do what's probably gonna take the longest time...
 & "$mount\update-ahorn.bat"
+Move-Item -Path "$mount\log-install-ahorn.txt" -Destination "$mount\log-init-ahorn.txt"
 
 if ($Redist) {
     & "$mount\launch-local-julia.bat" "$mount\misc\prepare-for-redistribution.jl"
