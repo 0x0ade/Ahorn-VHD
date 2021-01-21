@@ -36,8 +36,8 @@ steps:
   displayName: 'Upload to VPS'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   inputs:
-    sshEndpoint: '$(DEPLOY_SSH_ENDPOINT)'
+    sshEndpoint: 'ahornvhd@vps.0x0ade.ga'
     sourceFolder: '$(Build.ArtifactStagingDirectory)/'
     contents: '**'
-    targetFolder: '$(DEPLOY_SSH_PATH)'
+    targetFolder: '/home/ahornvhd/public/'
     readyTimeout: '20000'
