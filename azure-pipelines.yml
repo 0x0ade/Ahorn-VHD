@@ -14,20 +14,29 @@ steps:
     filePath: 'build.ps1'
     arguments: '-Redist'
 
-- task: CopyFiles@2
-  displayName: 'Pack main artifact'
+- task: ArchiveFiles@2
+  displayName: 'Create ahornvhd.7z'
   inputs:
-    sourceFolder: '$(Agent.BuildDirectory)'
-    contents: '**/out/**/*'
-    targetFolder: '$(Build.ArtifactStagingDirectory)/'
-    cleanTargetFolder: true
-    overWrite: true
-    flattenFolders: true
+    rootFolderOrFile: 'out'
+    includeRootFolder: false
+    archiveType: '7z'
+    sevenZipCompression: 'ultra'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/ahornvhd.7z'
+    replaceExistingArchive: true
+    verbose: true
 
 - task: PublishBuildArtifacts@1
-  condition: succeeded()
   displayName: 'Publish main artifact'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/'
     artifactName: 'main'
     publishLocation: 'Container'
+
+- task: CopyFilesOverSSH@0
+  displayName: 'Upload to VPS'
+  inputs:
+    sshEndpoint: '$(DEPLOY_SSH_ENDPOINT)'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)/'
+    contents: '**'
+    targetFolder: '$(DEPLOY_SSH_PATH)'
+    readyTimeout: '20000'
