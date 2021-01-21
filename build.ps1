@@ -160,6 +160,9 @@ Write-Output ""
 & "$mount\update-ahorn.bat"
 Move-Item -Path "$mount\log-install-ahorn.txt" -Destination "$mount\log-init-ahorn.txt"
 
+# File permissions are FUN.
+Write-Output "" | Out-File -Encoding UTF8 -FilePath "$mount\log-install-ahorn.txt"
+
 if ($Redist) {
     & "$mount\launch-local-julia.bat" "$mount\misc\prepare-for-redistribution.jl"
 }
@@ -168,6 +171,10 @@ if ($Redist) {
 
 # File permissions are FUN. Perms set on the mount point aren't inherited properly...
 Write-Host ""
+Write-Output "Fixing perms for dir $mount"
+$acl = Get-Acl "$mount"
+$acl.SetAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule((New-Object System.Security.Principal.SecurityIdentifier([System.Security.Principal.WellKnownSidType]::BuiltinUsersSid, $null)), "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")))
+Set-Acl -Path "$mount" -AclObject $acl
 foreach ($sub in Get-ChildItem -Path "$mount" -Directory) {
     Write-Output "Fixing perms for dir $($sub.FullName)"
     $acl = Get-Acl $sub.FullName
