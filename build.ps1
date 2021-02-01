@@ -74,7 +74,7 @@ $mount = "$root\mount"
 $out = "$root\out"
 $tmp = "$root\tmp"
 $cache = "$root\cache"
-$ahorn = "$out\ahorn.vhdx"
+$ahorn = "$out\ahorn.vhd"
 
 if (Test-Path -Path "$mount") {
     Remove-Item -Force -Path "$mount"
@@ -216,6 +216,10 @@ detach vdisk
 & diskpart /s "$tmp\dp-exit.txt"
 Remove-Item -Force -Path "$mount"
 New-Item -Path "$mount" -ItemType Directory
+
+
+# Windows 7 only supports VHD files but existing tooling expects a VHDX file.
+Move-Item -Path "$out\ahorn.vhd" -Destination "$out\ahorn.vhdx"
 
 Write-Output ""
 Write-Output "Done"
