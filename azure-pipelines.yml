@@ -5,7 +5,7 @@ steps:
 - task: Cache@2
   displayName: 'Grab cache folder'
   inputs:
-    key: 'cachedir-v3 | "$(Agent.OS)"'
+    key: 'cachedir-v4 | "$(Agent.OS)"'
     path: cache
 
 - task: CmdLine@2
