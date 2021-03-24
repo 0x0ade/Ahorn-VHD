@@ -118,7 +118,7 @@ $art
 This virtual disk image was created using the Ahorn-VHD tool by 0x0ade and is meant to be used with Olympus.
 If you're hardcore enough, feel free to update and then run Ahorn directly off of this VHD.
 The tool can be found at https://github.com/0x0ade/Ahorn-VHD
-It currently uses Julia 1.6.0-rc3.
+It currently uses Julia 1.6.0.
 
 Please read Ahorn's LICENSE file: https://github.com/CelestialCartographers/Ahorn/blob/master/LICENSE.md
 Most notably, "NO permission is granted to distribute [Ahorn]"
@@ -139,14 +139,14 @@ Copy-Item -Path "$root\data\*" -Destination "$mount\" -Recurse
 
 if (!(Test-Path -Path "$cache\julia.zip")) {
     Write-Output "Downloading Julia"
-    Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/1.6/julia-1.6.0-rc3-win64.zip" -OutFile "$cache\julia.zip"
+    Invoke-WebRequest -Uri "https://julialang-s3.julialang.org/bin/winnt/x64/1.6/julia-1.6.0-win64.zip" -OutFile "$cache\julia.zip"
 }
 Write-Output "Unpacking Julia"
 Expand-Archive -Force -Path "$cache\julia.zip" -DestinationPath "$mount\"
 if (Test-Path -Path "$mount\julia") {
     Remove-Item -Recurse -Path "$mount\julia"
 }
-Move-Item -Path "$mount\julia-1.6.0-rc3" -Destination "$mount\julia"
+Move-Item -Path "$mount\julia-1.6.0" -Destination "$mount\julia"
 
 if (!(Test-Path -Path "$mount\julia-depot")) {
     New-Item -Path "$mount\julia-depot" -ItemType Directory
